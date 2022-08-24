@@ -1,6 +1,0 @@
-{
-    "HOST_URL": "https://opendata.cwb.gov.tw/api",
-    "API_URL": {
-        "36HOUR_FORECAST": "v1/rest/datastore/F-C0032-001"
-    }
-}
