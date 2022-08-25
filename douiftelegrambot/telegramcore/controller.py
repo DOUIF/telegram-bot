@@ -6,7 +6,7 @@ from telegram.ext.callbackcontext import CallbackContext
 
 @dataclass
 class TelegramController:
-    __telegram_token: str = "5758390052:AAGiJesqjh9G_jkJtXo1zViMzoHdxmbg9ew"
+    __telegram_token: str = field(default="5758390052:AAGiJesqjh9G_jkJtXo1zViMzoHdxmbg9ew", init=False)
     __updater: Updater = field(init=False)
     __command_dict: dict = field(default_factory=dict, init=False)
 

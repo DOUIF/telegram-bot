@@ -8,7 +8,7 @@ from pathlib import Path
 
 @dataclass
 class DataCrawler:
-    __api_token: str = "CWB-79DFE6D9-0EFB-4F48-947B-01982F16C096"
+    __api_token: str = field(default="CWB-79DFE6D9-0EFB-4F48-947B-01982F16C096", init=False)
     __api_url: API_URL = field(default_factory=API_URL, init=False)
 
     def get_36hour_forecast(self, **kwargs) -> dict:
