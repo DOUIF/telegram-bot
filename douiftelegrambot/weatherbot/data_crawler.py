@@ -2,7 +2,7 @@ import json
 from dataclasses import dataclass, field
 
 import requests
-from .APIs import APIs as API_URL
+from .apis import APIs as API_URL
 from pathlib import Path
 
 CURRENT_PATH = Path(__file__).parents[0]

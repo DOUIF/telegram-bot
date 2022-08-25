@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from .DataCrawler import DataCrawler
+from .data_crawler import DataCrawler
 
 
 @dataclass
