@@ -8,7 +8,7 @@ API_JSON_FILE = f"{CURRENT_PATH}\\APIs.json"
 @dataclass
 class APIs:
     __HOST_URL: str = "https://opendata.cwb.gov.tw/api"
-    __API_URL: dict = field(default_factory=dict)
+    __API_URL: dict = field(default_factory=dict, init=False)
 
     def __post_init__(self):
         self.__API_URL = {

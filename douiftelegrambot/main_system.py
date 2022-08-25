@@ -2,12 +2,16 @@ from dataclasses import dataclass, field
 import sys
 
 from . import weatherbot
+from . import telegramcore
 
 
 @dataclass
 class MainSystem:
     __weather_controller: weatherbot.WeatherDataController = field(
-        default_factory=weatherbot.WeatherDataController
+        default_factory=weatherbot.WeatherDataController, init=False
+    )
+    __telegram_controller: telegramcore.TelegramController = field(
+        default_factory=telegramcore.TelegramController, init=False
     )
 
     def __post_init__(self):
