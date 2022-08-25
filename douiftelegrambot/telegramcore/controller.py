@@ -7,7 +7,7 @@ from telegram.ext.callbackcontext import CallbackContext
 @dataclass
 class TelegramController:
     __telegram_token: str = "5758390052:AAGiJesqjh9G_jkJtXo1zViMzoHdxmbg9ew"
-    __updater: str = field(init=False)
+    __updater: Updater = field(init=False)
     __command_dict: dict = field(default_factory=dict, init=False)
 
     def __post_init__(self) -> None:
@@ -24,4 +24,5 @@ class TelegramController:
             self.__updater.dispatcher.add_handler(CommandHandler(_command, _function))
 
     def __bot_command_hello(self, update: Update, callback_context: CallbackContext) -> None:
-        update.message.reply_text(f"hello {update.message.from_user.first_name}")
+        user_name = update.message.from_user.first_name
+        update.message.reply_text(f"Hello {user_name}, how can I help you?")
