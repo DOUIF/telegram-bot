@@ -65,4 +65,4 @@ class TelegramController(Process):
         data = eval(update.callback_query.data)
         command_type = data["command_type"]
         if command_type in self.__call_back_query_function_dict:
-            self.__call_back_query_function_dict[command_type](update, context)
+            self.__call_back_query_function_dict[command_type](update, data)
