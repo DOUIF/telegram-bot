@@ -22,3 +22,7 @@ class BasicCommand:
     def __command_hello(self, update: Update, callback_context: CallbackContext) -> None:
         user_name = update.message.from_user.first_name
         update.message.reply_text(f"Hello {user_name}, how can I help you?")
+
+    def call_back_query_handler(self, update: Update, context: CallbackContext):
+        message = update.callback_query.data
+        print("basic:" + message)

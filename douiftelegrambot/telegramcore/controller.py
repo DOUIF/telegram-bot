@@ -2,7 +2,7 @@ from multiprocessing import Process, Queue
 from threading import Thread
 from time import sleep
 
-from telegram.ext import CommandHandler, Updater
+from telegram.ext import CommandHandler, Updater, CallbackQueryHandler
 from telegram.ext.callbackcontext import CallbackContext
 from telegram.update import Update
 from .basic_command import BasicCommand
@@ -50,3 +50,17 @@ class TelegramController(Process):
 
         for _command, _function in all_command_dict.items():
             self.__updater.dispatcher.add_handler(CommandHandler(_command, _function))
+
+        self.__updater.dispatcher.add_handler(CallbackQueryHandler(self.__call_back_query_handler))
+
+        self.__call_back_query_function_dict = {
+            "basic": self.__basic_command.call_back_query_handler,
+            "weather": self.__weather_command.call_back_query_handler,
+        }
+
+    def __call_back_query_handler(self, update: Update, context: CallbackContext):
+        data = eval(update.callback_query.data)
+        print(f"{data=}")
+        command_type = data["command_type"]
+        if command_type in self.__call_back_query_function_dict:
+            self.__call_back_query_function_dict[command_type](update, context)

@@ -20,6 +20,19 @@ class WeatherCommand:
     def get_all_command(self) -> dict:
         return self.__command_dict
 
+    def call_back_query_handler(self, update: Update, context: CallbackContext):
+        message = update.callback_query.data
+        print("weather:" + message)
+
     def __command_weather_today(self, update: Update, callback_context: CallbackContext) -> None:
-        user_name = update.message.from_user.first_name
-        update.message.reply_text(f"Hello {user_name}, how can I help you?")
+        today_dict = {"command_type": "weather", "data": "1"}
+        week_dict = {"command_type": "weather", "data": "2"}
+        _reply_markup = InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton("Today", callback_data=str(today_dict)),
+                    InlineKeyboardButton("Week", callback_data=str(week_dict)),
+                ]
+            ]
+        )
+        update.message.reply_text(f"What do you want to know about weather?", reply_markup=_reply_markup)
