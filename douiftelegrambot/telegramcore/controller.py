@@ -18,11 +18,7 @@ class TelegramController(Process):
 
     # MultiProcess start entry
     def run(self):
-        self.__updater = Updater(self.__telegram_token)
-
-        self.__weather_command = WeatherCommand(self.__request_queue, self.__result_queue)
-        self.__basic_command = BasicCommand(self.__request_queue, self.__result_queue)
-        self.__init_updater_command()
+        self.__process_init()
 
         polling_thread = Thread(target=self.__start_polling)
         polling_thread.start()
@@ -40,10 +36,22 @@ class TelegramController(Process):
 
         polling_thread.join()
 
+    def __process_init(self):
+        self.__updater = Updater(self.__telegram_token)
+
+        self.__weather_command = WeatherCommand(self.__request_queue, self.__result_queue)
+        self.__basic_command = BasicCommand(self.__request_queue, self.__result_queue)
+
+        self.__call_back_query_function_dict = {
+            "basic": self.__basic_command.call_back_query_handler,
+            "weather": self.__weather_command.call_back_query_handler,
+        }
+        self.__init_command_dispatcher()
+
     def __start_polling(self):
         self.__updater.start_polling()
 
-    def __init_updater_command(self) -> None:
+    def __init_command_dispatcher(self) -> None:
         all_command_dict = dict()
         all_command_dict.update(self.__basic_command.get_all_command())
         all_command_dict.update(self.__weather_command.get_all_command())
@@ -53,14 +61,8 @@ class TelegramController(Process):
 
         self.__updater.dispatcher.add_handler(CallbackQueryHandler(self.__call_back_query_handler))
 
-        self.__call_back_query_function_dict = {
-            "basic": self.__basic_command.call_back_query_handler,
-            "weather": self.__weather_command.call_back_query_handler,
-        }
-
     def __call_back_query_handler(self, update: Update, context: CallbackContext):
         data = eval(update.callback_query.data)
-        print(f"{data=}")
         command_type = data["command_type"]
         if command_type in self.__call_back_query_function_dict:
             self.__call_back_query_function_dict[command_type](update, context)
