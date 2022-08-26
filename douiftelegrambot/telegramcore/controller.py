@@ -5,6 +5,8 @@ from time import sleep
 from telegram.ext import CommandHandler, Updater
 from telegram.ext.callbackcontext import CallbackContext
 from telegram.update import Update
+from .basic_command import BasicCommand
+from .weather_command import WeatherCommand
 
 
 class TelegramController(Process):
@@ -17,12 +19,14 @@ class TelegramController(Process):
     # MultiProcess start entry
     def run(self):
         self.__updater = Updater(self.__telegram_token)
-        self.__command_dict = {
-            "hello": self.__bot_command_hello,
-        }
+
+        self.__weather_command = WeatherCommand(self.__request_queue, self.__result_queue)
+        self.__basic_command = BasicCommand(self.__request_queue, self.__result_queue)
         self.__init_updater_command()
+
         polling_thread = Thread(target=self.__start_polling)
         polling_thread.start()
+
         while True:
             sleep(0.1)
             if not self.__result_queue:
@@ -34,16 +38,15 @@ class TelegramController(Process):
                 self.__updater.stop()
                 break
 
-        # polling_thread.join()
+        polling_thread.join()
 
     def __start_polling(self):
         self.__updater.start_polling()
-        # self.__updater.idle()
 
     def __init_updater_command(self) -> None:
-        for _command, _function in self.__command_dict.items():
-            self.__updater.dispatcher.add_handler(CommandHandler(_command, _function))
+        all_command_dict = dict()
+        all_command_dict.update(self.__basic_command.get_all_command())
+        all_command_dict.update(self.__weather_command.get_all_command())
 
-    def __bot_command_hello(self, update: Update, callback_context: CallbackContext) -> None:
-        user_name = update.message.from_user.first_name
-        update.message.reply_text(f"Hello {user_name}, how can I help you?")
+        for _command, _function in all_command_dict.items():
+            self.__updater.dispatcher.add_handler(CommandHandler(_command, _function))
