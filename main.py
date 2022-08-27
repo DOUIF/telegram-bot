@@ -4,7 +4,6 @@ import douiftelegrambot
 def main():
     print("Start System.")
     main_system = douiftelegrambot.MainSystem()
-    print(f"{main_system=}")
     print("Initial finish.")
     main_system.start_system()
 
