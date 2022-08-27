@@ -46,7 +46,7 @@ class WeatherDataController(Process):
                 start_time = datetime.strptime(element["startTime"], "%Y-%m-%d %H:%M:%S")
                 if 6 <= start_time.hour < 18:
                     start_time = start_time.strftime("%m月%d號 白天")
-                elif 18 <= start_time.hour or start_time > 6:
+                else:
                     start_time = start_time.strftime("%m月%d號 晚間")
                 description = element["elementValue"][0]["value"]
                 result.append(f"{start_time}: {description}")
