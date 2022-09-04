@@ -15,6 +15,7 @@ class MainSystem:
     __weather_request_queue: Queue = field(default_factory=Queue, init=False)
     __weather_result_queue: Queue = field(default_factory=Queue, init=False)
     __system_running: str = field(default=False, init=False)
+    __token: dict = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.__init_telegram_controller()
@@ -25,6 +26,7 @@ class MainSystem:
         self.__telegram_request_queue = Queue()
         self.__telegram_result_queue = Queue()
         self.__telegram_controller = telegramcore.TelegramController(
+            self.__token["telegram"],
             self.__telegram_request_queue,
             self.__telegram_result_queue,
         )
@@ -34,6 +36,7 @@ class MainSystem:
         self.__weather_request_queue = Queue()
         self.__weather_result_queue = Queue()
         self.__weather_controller = weatherbot.WeatherDataController(
+            self.__token["open_weather_data"],
             self.__weather_request_queue,
             self.__weather_result_queue,
         )

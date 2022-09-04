@@ -6,11 +6,11 @@ from datetime import datetime
 
 
 class WeatherDataController(Process):
-    def __init__(self, __bot_request_queue: Queue, __bot_result_queue: Queue) -> None:
+    def __init__(self, __token:str, __bot_request_queue: Queue, __bot_result_queue: Queue) -> None:
         super().__init__()
         self.__request_queue = __bot_request_queue
         self.__result_queue = __bot_result_queue
-        self.__data_crawler = DataCrawler()
+        self.__data_crawler = DataCrawler(__token)
 
     # MultiProcess start entry
     def run(self) -> None:

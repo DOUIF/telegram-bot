@@ -13,9 +13,9 @@ from .weather_command import WeatherCommand
 
 
 class TelegramController(Process):
-    def __init__(self, __bot_request_queue: Queue, __bot_result_queue: Queue) -> None:
+    def __init__(self, __token: str, __bot_request_queue: Queue, __bot_result_queue: Queue) -> None:
         super().__init__()
-        self.__telegram_token = "5758390052:AAGiJesqjh9G_jkJtXo1zViMzoHdxmbg9ew"
+        self.__telegram_token = __token
         self.__request_queue = __bot_request_queue
         self.__result_queue = __bot_result_queue
 
